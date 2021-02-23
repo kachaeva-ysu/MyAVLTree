@@ -17,6 +17,7 @@ namespace TimeChecking
             tree.Add(17, "e");
             tree.Add(3, "e");
             tree.Add(18, "e");
+            tree.Add(14, "e");
             Console.WriteLine(tree.FindNode(3).Parent.Parent.Right.Left.Key.ToString());
             Console.ReadLine();
         }
