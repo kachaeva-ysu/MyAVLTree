@@ -11,15 +11,26 @@ namespace TimeChecking
     {
         private static void Main(string[] args)
         {
-            var tree = new AVLTree<int, string>();
-            tree.Add(20, "e");
-            tree.Add(15, "e");
-            tree.Add(17, "e");
-            tree.Add(3, "e");
-            tree.Add(18, "e");
-            tree.Add(14, "e");
-            Console.WriteLine(tree.FindNode(3).Parent.Parent.Right.Left.Key.ToString());
-            Console.WriteLine("Danya made a commit");
+            var tree = new AVLTree<int, string>
+            {
+                { 16, "e" },
+                { 4, "e" },
+                { 900, "e" },
+                { 81, "e" },
+                { 11, "e" },
+                { 13, "e" },
+                { 8, "e" },
+                { 17, "e" },
+                { 70, "e" },
+                { 73, "e" },
+                { 111, "e" },
+                { 135, "e" }
+            };
+            Console.WriteLine(tree._root.Key);
+            tree.Remove(16);
+            var traversedTree = tree.Traverse();
+            foreach (var item in traversedTree)
+                Console.WriteLine(item);
             Console.ReadLine();
         }
     }
