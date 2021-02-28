@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace MyAVLTree
 {
-    //remove?
     public class AVLTree<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
         where TKey : IComparable<TKey>
     {
@@ -19,8 +18,8 @@ namespace MyAVLTree
             Count = 0;
         }
 
-        #region balance
-        Node<TKey, TValue> RotateRight(Node<TKey, TValue> p)
+        #region balancing
+        private Node<TKey, TValue> RotateRight(Node<TKey, TValue> p)
         {
             var q = p.Left;
             p.Left = q.Right;
@@ -29,7 +28,7 @@ namespace MyAVLTree
                 _root = q;
             return q;
         }
-        Node<TKey, TValue> RotateLeft(Node<TKey, TValue> q)
+        private Node<TKey, TValue> RotateLeft(Node<TKey, TValue> q)
         {
             var p = q.Right;
             q.Right=p.Left;
@@ -38,7 +37,7 @@ namespace MyAVLTree
                 _root = p;
             return p;
         }
-        Node<TKey,TValue> Balance(Node<TKey,TValue> p)
+        private Node<TKey,TValue> Balance(Node<TKey,TValue> p)
         {
             p.FixHeight();
             if(p.balanceFactor==2)
@@ -56,6 +55,7 @@ namespace MyAVLTree
             return p;
         }
         #endregion
+        #region addition
         public void Add(TKey key, TValue value)
         {
             _root=Insert(key, value, _root);
@@ -74,6 +74,52 @@ namespace MyAVLTree
                 p.Right = Insert(key, value, p.Right);
             return Balance(p);
         }
+        #endregion
+        #region removing
+        public bool Remove(TKey key)
+        {
+            var result = Remove(_root, key);
+            if (result == null)
+                return false;
+            return true;
+        }
+        private Node<TKey,TValue> FindMin(Node<TKey,TValue> p)
+        {
+            if (p.Left == null)
+                return p;
+            return FindMin(p.Left);
+        }
+        private Node<TKey, TValue> RemoveMin(Node<TKey, TValue> p)
+        {
+            if (p.Left == null)
+                return p.Right;
+            p.Left = RemoveMin(p.Left);
+            return Balance(p);
+        }
+        private Node<TKey, TValue> Remove (Node<TKey, TValue> p, TKey key)
+        {
+            if (p == null)
+                return null;
+            if (key.CompareTo(p.Key) < 0)
+                p.Left = Remove(p.Left, key);
+            else if (key.CompareTo(p.Key) > 0)
+                p.Right = Remove(p.Right, key);
+            else
+            {
+                Node<TKey, TValue> q = p.Left;
+                Node<TKey, TValue> r = p.Right;
+                p = null;
+                if (r == null)
+                    return q;
+                Node<TKey, TValue> min = FindMin(r);
+                min.Right = RemoveMin(r);
+                min.Left = q;
+                return Balance(min);
+            }
+            return Balance(p);
+        }
+        #endregion
+        #region search
         private Node<TKey, TValue> FindNode(TKey key)
         {
             var current = _root;
@@ -100,6 +146,25 @@ namespace MyAVLTree
                 return false;
             return true;
         }
+        public TValue this[TKey key]
+        {
+            get
+            {
+                var result = FindNode(key);
+                if (result == null)
+                    throw new ArgumentNullException();
+                return result.Value;
+            }
+            set
+            {
+                var result = FindNode(key);
+                if (result == null)
+                    throw new ArgumentNullException();
+                result.Value = value;
+            }
+        }
+        #endregion
+        #region enumeration
         public IEnumerable<KeyValuePair<TKey, TValue>> Traverse()
         {
             return Traverse(_root);
@@ -126,5 +191,6 @@ namespace MyAVLTree
         {
             return Traverse(_root).GetEnumerator();
         }
+        #endregion
     }
 }

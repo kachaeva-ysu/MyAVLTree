@@ -16,7 +16,9 @@ namespace MyAVLTree
         {
             get
             {
-                if(Right==null)
+                if (Right == null && Left == null)
+                    return 0;
+                else if(Right==null)
                     return -Left.height;
                 else if (Left == null)
                     return Right.height;
@@ -32,14 +34,14 @@ namespace MyAVLTree
         }
         public void FixHeight()
         {
-            if (Right == null)
+            if (Right == null & Left == null)
+                height = 1;
+            else if (Right == null)
                 height = Left.height + 1;
             else if (Left == null)
                 height = Right.height + 1;
             else
                 height = Math.Max(Left.height, Right.height) + 1;
         }
-
-        
     }
 }
