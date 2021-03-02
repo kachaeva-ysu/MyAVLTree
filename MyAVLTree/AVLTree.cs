@@ -19,6 +19,7 @@ namespace MyAVLTree
         }
 
         #region balancing
+
         private Node<TKey, TValue> RotateRight(Node<TKey, TValue> p)
         {
             var q = p.Left;
@@ -28,25 +29,27 @@ namespace MyAVLTree
                 _root = q;
             return q;
         }
+
         private Node<TKey, TValue> RotateLeft(Node<TKey, TValue> q)
         {
             var p = q.Right;
-            q.Right=p.Left;
+            q.Right = p.Left;
             p.Left = q;
             if (q == _root)
                 _root = p;
             return p;
         }
-        private Node<TKey,TValue> Balance(Node<TKey,TValue> p)
+
+        private Node<TKey, TValue> Balance(Node<TKey, TValue> p)
         {
             p.FixHeight();
-            if(p.balanceFactor==2)
+            if (p.balanceFactor == 2)
             {
                 if (p.Right.balanceFactor < 0)
                     p.Right = RotateRight(p.Right);
                 return RotateLeft(p);
             }
-            if(p.balanceFactor==-2)
+            if (p.balanceFactor == -2)
             {
                 if (p.Left.balanceFactor > 0)
                     p.Left = RotateLeft(p.Left);
@@ -54,13 +57,17 @@ namespace MyAVLTree
             }
             return p;
         }
-        #endregion
+
+        #endregion balancing
+
         #region addition
+
         public void Add(TKey key, TValue value)
         {
-            _root=Insert(key, value, _root);
+            _root = Insert(key, value, _root);
         }
-        private Node<TKey,TValue> Insert(TKey key, TValue value,Node<TKey,TValue> p)
+
+        private Node<TKey, TValue> Insert(TKey key, TValue value, Node<TKey, TValue> p)
         {
             var node = new Node<TKey, TValue>(key, value);
             if (p == null)
@@ -74,8 +81,11 @@ namespace MyAVLTree
                 p.Right = Insert(key, value, p.Right);
             return Balance(p);
         }
-        #endregion
+
+        #endregion addition
+
         #region removing
+
         public bool Remove(TKey key)
         {
             var result = Remove(_root, key);
@@ -83,12 +93,14 @@ namespace MyAVLTree
                 return false;
             return true;
         }
-        private Node<TKey,TValue> FindMin(Node<TKey,TValue> p)
+
+        private Node<TKey, TValue> FindMin(Node<TKey, TValue> p)
         {
             if (p.Left == null)
                 return p;
             return FindMin(p.Left);
         }
+
         private Node<TKey, TValue> RemoveMin(Node<TKey, TValue> p)
         {
             if (p.Left == null)
@@ -96,7 +108,8 @@ namespace MyAVLTree
             p.Left = RemoveMin(p.Left);
             return Balance(p);
         }
-        private Node<TKey, TValue> Remove (Node<TKey, TValue> p, TKey key)
+
+        private Node<TKey, TValue> Remove(Node<TKey, TValue> p, TKey key)
         {
             if (p == null)
                 return null;
@@ -118,8 +131,11 @@ namespace MyAVLTree
             }
             return Balance(p);
         }
-        #endregion
+
+        #endregion removing
+
         #region search
+
         private Node<TKey, TValue> FindNode(TKey key)
         {
             var current = _root;
@@ -140,12 +156,14 @@ namespace MyAVLTree
             }
             return null;
         }
+
         public bool ContainsKey(TKey key)
         {
             if (FindNode(key) == null)
                 return false;
             return true;
         }
+
         public TValue this[TKey key]
         {
             get
@@ -163,12 +181,16 @@ namespace MyAVLTree
                 result.Value = value;
             }
         }
-        #endregion
+
+        #endregion search
+
         #region enumeration
+
         public IEnumerable<KeyValuePair<TKey, TValue>> Traverse()
         {
             return Traverse(_root);
         }
+
         private IEnumerable<KeyValuePair<TKey, TValue>> Traverse(Node<TKey, TValue> node)
         {
             var list = new List<KeyValuePair<TKey, TValue>>();
@@ -180,6 +202,7 @@ namespace MyAVLTree
             }
             return list;
         }
+
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
             foreach (var item in Traverse(_root))
@@ -187,10 +210,12 @@ namespace MyAVLTree
                 yield return item;
             }
         }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return Traverse(_root).GetEnumerator();
         }
-        #endregion
+
+        #endregion enumeration
     }
 }
