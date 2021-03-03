@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyAVLTree
 {
@@ -25,8 +22,11 @@ namespace MyAVLTree
             var q = p.Left;
             p.Left = q.Right;
             q.Right = p;
+            p.FixHeight();
             if (p == _root)
+            {
                 _root = q;
+            }
             return q;
         }
 
@@ -35,6 +35,7 @@ namespace MyAVLTree
             var p = q.Right;
             q.Right = p.Left;
             p.Left = q;
+            q.FixHeight();
             if (q == _root)
                 _root = p;
             return p;
@@ -43,15 +44,15 @@ namespace MyAVLTree
         private Node<TKey, TValue> Balance(Node<TKey, TValue> p)
         {
             p.FixHeight();
-            if (p.balanceFactor == 2)
+            if (p.BalanceFactor == 2)
             {
-                if (p.Right.balanceFactor < 0)
+                if (p.Right.BalanceFactor < 0)
                     p.Right = RotateRight(p.Right);
                 return RotateLeft(p);
             }
-            if (p.balanceFactor == -2)
+            if (p.BalanceFactor == -2)
             {
-                if (p.Left.balanceFactor > 0)
+                if (p.Left.BalanceFactor > 0)
                     p.Left = RotateLeft(p.Left);
                 return RotateRight(p);
             }
@@ -112,7 +113,9 @@ namespace MyAVLTree
         private Node<TKey, TValue> Remove(Node<TKey, TValue> p, TKey key)
         {
             if (p == null)
+            {
                 return null;
+            }
             if (key.CompareTo(p.Key) < 0)
                 p.Left = Remove(p.Left, key);
             else if (key.CompareTo(p.Key) > 0)
@@ -127,6 +130,7 @@ namespace MyAVLTree
                 Node<TKey, TValue> min = FindMin(r);
                 min.Right = RemoveMin(r);
                 min.Left = q;
+                Count--;
                 return Balance(min);
             }
             return Balance(p);

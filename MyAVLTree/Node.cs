@@ -11,14 +11,15 @@ namespace MyAVLTree
         public TKey Key { get; set; }
         public TValue Value { get; set; }
         public Node<TKey, TValue> Left, Right;
-        public int height=0;
-        public int balanceFactor
+        public int height = 0;
+
+        public int BalanceFactor
         {
             get
             {
                 if (Right == null && Left == null)
                     return 0;
-                else if(Right==null)
+                else if (Right == null)
                     return -Left.height;
                 else if (Left == null)
                     return Right.height;
@@ -26,12 +27,14 @@ namespace MyAVLTree
                     return Right.height - Left.height;
             }
         }
+
         public Node(TKey key, TValue value)
         {
             Key = key;
             Value = value;
             height = 1;
         }
+
         public void FixHeight()
         {
             if (Right == null & Left == null)
