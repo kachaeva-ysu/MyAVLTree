@@ -23,10 +23,6 @@ namespace MyAVLTree
             p.Left = q.Right;
             q.Right = p;
             p.FixHeight();
-            if (p == _root)
-            {
-                _root = q;
-            }
             return q;
         }
 
@@ -36,8 +32,6 @@ namespace MyAVLTree
             q.Right = p.Left;
             p.Left = q;
             q.FixHeight();
-            if (q == _root)
-                _root = p;
             return p;
         }
 
