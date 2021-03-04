@@ -151,6 +151,37 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void AllTurnsWorkCorrectly()
+        {
+            AVLTree<int, string> tree = new AVLTree<int, string>();
+            int[] array = new int[] { 7, 13, 27, 3, 5, 1, 4, 8, 17, 22, 14, 41, 25 };
+            foreach (var a in array)
+            {
+                tree.Add(a, "a");
+            }
+            Array.Sort(array);
+            int i = 0;
+            foreach(var pair in tree)
+            {
+                Assert.AreEqual(array[i], pair.Key);
+                i++;
+            }
+            tree.Remove(27);
+            tree.Remove(7);
+            tree.Remove(13);
+            tree.Remove(8);
+            int[] array2 = new int[] { 3, 5, 1, 4, 17, 22, 14, 41, 25 };
+            Array.Sort(array2);
+            i = 0;
+            foreach (var pair in tree)
+            {
+                Assert.AreEqual(array2[i], pair.Key);
+                i++;
+            }
+
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void CanNotGetWrongIndex()
         {

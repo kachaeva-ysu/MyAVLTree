@@ -64,9 +64,10 @@ namespace MyAVLTree
 
         private Node<TKey, TValue> Insert(TKey key, TValue value, Node<TKey, TValue> p)
         {
-            var node = new Node<TKey, TValue>(key, value);
+            
             if (p == null)
             {
+                var node = new Node<TKey, TValue>(key, value);
                 Count++;
                 return node;
             }
@@ -116,15 +117,17 @@ namespace MyAVLTree
                 p.Right = Remove(p.Right, key);
             else
             {
+                Count--;
                 Node<TKey, TValue> q = p.Left;
                 Node<TKey, TValue> r = p.Right;
-                p = null;
                 if (r == null)
                     return q;
                 Node<TKey, TValue> min = FindMin(r);
                 min.Right = RemoveMin(r);
                 min.Left = q;
-                Count--;
+                if (p == _root)
+                    _root = min;
+                p = null;
                 return Balance(min);
             }
             return Balance(p);

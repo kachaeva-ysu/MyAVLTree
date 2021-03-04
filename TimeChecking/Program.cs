@@ -69,6 +69,21 @@ namespace TimeChecking
             Console.WriteLine(addResult);
             Console.WriteLine(removeResult);
             Console.WriteLine(containsResult);
+
+
+            AVLTree<int, string> tree2 = new AVLTree<int, string>();
+            int[] array2 = new int[] { 7, 13, 27, 3, 5, 1, 4, 8, 17, 22, 14, 41, 25 };
+            foreach (var a in array2)
+            {
+                tree2.Add(a, "a");
+            }
+            tree2.Remove(27);
+            tree2.Remove(7);
+            tree2.Remove(13);
+            tree2.Remove(8);
+            array2 = new int[] { 3, 5, 1, 4, 17, 22, 14, 41, 25 };
+            Array.Sort(array2);
+            Console.WriteLine(tree.Traverse().ToString());
             Console.ReadLine();
         }
     }
